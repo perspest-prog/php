@@ -8,5 +8,6 @@
     <?php
     echo "<p>awdawdawd</p>"
     ?>
+    awdawdawd
 </body>
 </html>

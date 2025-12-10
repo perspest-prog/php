@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Comment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use App\Events\NewArticleEvent;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ArticleCreatedNotification;
+use App\Jobs\VeryLongJob;
 
 
 class ArticleController extends Controller
@@ -22,7 +24,7 @@ class ArticleController extends Controller
         $articles = Cache::remember('articles_' . $page, 300, function () {
             return Article::latest()->paginate(5);
         });
-        // $articles = Article::latest()->paginate(5);
+        
         return view('article.articles', ['articles' => $articles]);
     }
 
@@ -51,8 +53,12 @@ class ArticleController extends Controller
         $article->title = request('title');
         $article->text = $request->text;
         $article->users_id = auth()->id();
+
+        $readers = User::where('id', '!=', auth()->id())->get();
+
         if ($article->save()) {
-            NewArticleEvent::dispatch($article);
+            VeryLongJob::dispatch($article, auth()->user()->name);
+            Notification::send($readers, new ArticleCreatedNotification($article));
 
             Cache::flush();
         }

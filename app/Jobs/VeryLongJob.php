@@ -8,11 +8,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\CommentMail;
+use App\Mail\ArticleMail;
 use App\Models\Article;
-use App\Models\Comment;
-
-
 
 
 class VeryLongJob implements ShouldQueue
@@ -22,7 +19,7 @@ class VeryLongJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(public Article $article, public Comment $comment, public $author)
+    public function __construct(public Article $article, public $author)
     {
         //
     }
@@ -32,6 +29,6 @@ class VeryLongJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to('ivan.avilov.0606@mail.ru')->send(new CommentMail($this->comment, $this->article, $this->author));
+        Mail::to('ivan.avilov.0606@mail.ru')->send(new ArticleMail($this->article, $this->author));
     }
 }

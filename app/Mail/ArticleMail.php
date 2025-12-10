@@ -8,19 +8,18 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Address;
-use App\Models\Comment;
 use App\Models\Article;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\support\Facades\Log;
 
-class CommentMail extends Mailable
+class ArticleMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public Comment $comment, public Article $article, public $author)
+    public function __construct(public Article $article, public $author)
     {
         //
     }
@@ -33,7 +32,7 @@ class CommentMail extends Mailable
         // Log::alert(env("MAIL_FROM_ADDRESS"));
         return new Envelope(
             from: new Address(env("MAIL_FROM_ADDRESS"), 'Ivan'),
-            subject: 'CommentMail',
+            subject: 'Опубликована новая статья!',
         );
     }
 
@@ -43,10 +42,9 @@ class CommentMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.comment',
+            markdown: 'mail.article',
             with: [
-                'comment' => $this->comment,
-                'article_title' => $this->article->title,
+                'article' => $this->article,
                 'author' => $this->author,
             ]
         );

@@ -78,7 +78,7 @@ class CommentController extends Controller
         $article = Article::findOrFail($comment->article_id);
         $users = User::where('id', '!=', $comment->user_id)->get();
         if ($comment->save()) {
-            Notification::send($users, new NewCommentNotify($article->title, $article->id));
+            // Notification::send($users, new NewCommentNotify($article->title, $article->id));
             // Очищаем весь кэш после успешного принятия
             Cache::flush();
         }

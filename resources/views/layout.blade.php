@@ -26,7 +26,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link @active('article')" aria-current="page" href="/article">Article</a>
+          <a class="nav-link @active('article')" aria-current="page" href="/article">Articles</a>
         </li>
         @can('create')
         <li class="nav-item">

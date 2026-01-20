@@ -16,6 +16,5 @@ class ThingSeeder extends Seeder
     public function run(): void
     {
         Thing::factory(5)->create();
-        $this->command->info('Создано 5 вещей!');
     }
 }

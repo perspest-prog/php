@@ -6,7 +6,7 @@
 
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
             @viteReactRefresh
-            @vite(['resources/css/app.css', 'resources/js/app.tsx'])
+            @vite(['resources/js/app.tsx'])
         @endif
     </head>
     <body>
@@ -21,6 +21,7 @@
                         <a href="{{ route('things.index', ['filter' => 'inWork']) }}">Вещи в работе</a>
                         <a href="{{ route('things.index', ['filter' => 'inUsage']) }}">Мои вещи в usage</a>
                     </details>
+                    <a href="{{ route('places.index') }}">Список мест</a>
                 </nav>
                 <span>{{ auth()->user()->name }}</span>
             @endauth

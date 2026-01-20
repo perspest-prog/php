@@ -11,10 +11,10 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('things', ThingController::class);
+    Route::apiResource('things', ThingController::class)->names('api.things');
 
-    Route::apiResource('places', PlaceController::class);
+    Route::apiResource('places', PlaceController::class)->names('api.places');
 
-    Route::get('/archive', [ArchiveController::class, 'index']);
-    Route::patch('/archive/{archive}/restore', [ArchiveController::class, 'restore']);
+    Route::get('/archive', [ArchiveController::class, 'index'])->name('api.archive.index');
+    Route::patch('/archive/{archive}/restore', [ArchiveController::class, 'restore'])->name('api.archive.restore');
 });

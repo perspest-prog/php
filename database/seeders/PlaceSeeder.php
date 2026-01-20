@@ -16,6 +16,5 @@ class PlaceSeeder extends Seeder
     public function run(): void
     {
         Place::factory(3)->create();
-        $this->command->info('Создано 3 места!');
     }
 }

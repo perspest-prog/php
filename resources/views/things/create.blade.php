@@ -26,7 +26,14 @@
         @error('wrnt')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
-        <small class="form-text text-muted">Если это срок в годах — введите текст в поле "Описание".</small>
+    </div>
+
+    <div class="mb-3">
+        <label for="amount" class="form-label">Количество</label>
+        <input type="number" class="form-control @error('amount') is-invalid @enderror" id="amount" name="amount" value="{{ old('amount') }}" required>
+        @error('amount')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
     </div>
 
     <button type="submit" class="btn btn-primary">Создать вещь</button>

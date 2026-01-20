@@ -12,8 +12,6 @@ use App\Models\Archive;
 
 class ThingController extends Controller
 {
-    # GET /api/things
-    # GET /api/things?filter=my|inWork|inRepair|inUsage
     public function index(Request $request)
     {
         Gate::authorize('viewAny', Thing::class);
@@ -46,7 +44,6 @@ class ThingController extends Controller
         return response()->json($things->values());
     }
 
-    # POST /api/things
     public function store(Request $request)
     {
         Gate::authorize('create', Thing::class);
@@ -70,7 +67,6 @@ class ThingController extends Controller
         return response()->json($thing, 201);
     }
 
-    # GET /api/things/{thing}
     public function show(Thing $thing)
     {
         Gate::authorize('view', $thing);
@@ -78,7 +74,6 @@ class ThingController extends Controller
         return response()->json($thing);
     }
 
-    # PUT /api/things/{thing}
     public function update(Request $request, Thing $thing)
     {
         Gate::authorize('update', $thing);
@@ -104,7 +99,6 @@ class ThingController extends Controller
         return response()->json($thing);
     }
 
-    # DELETE /api/things/{thing}
     public function destroy(Thing $thing)
     {
         Gate::authorize('delete', $thing);

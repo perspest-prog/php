@@ -71,8 +71,8 @@ class ThingController extends Controller
         $thing = Thing::create([
             ...$validated,
             'description' => [
-                'variants' => [$validated['description']],
-                'current' => $validated['description']
+                'variants' => array_key_exists('description', $validated) ? [$validated['description']] : [],
+                'current' => $validated['description'] ?? null
             ],
             'master_id' => Auth::id(), 
         ]);

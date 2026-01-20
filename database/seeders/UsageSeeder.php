@@ -16,6 +16,5 @@ class UsageSeeder extends Seeder
     public function run(): void
     {
         Usage::factory(10)->create();
-        $this->command->info('Создано 10 использований!');
     }
 }

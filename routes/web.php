@@ -9,12 +9,11 @@ use App\Http\Controllers\UsageController;
 
 Route::get('/auth/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/auth/login', [AuthController::class, 'login'])->name('login.process');
-Route::post('/auth/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/auth/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/auth/register', [AuthController::class, 'register'])->name('register.process');
 
-Route::get('/auth/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/auth/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/', function () {
     return view('index');

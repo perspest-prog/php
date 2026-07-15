@@ -1,2 +1,133 @@
-# Дисциплина Серверная веб-разработка
-## Экзаменационный проект Авилов Иван
+Отличный вопрос — именование роутов и шаблонов в Laravel — это не просто формальность, а важная часть **соглашений о коде**, которая влияет на **читаемость, поддерживаемость и соответствие стандартам сообщества**.
+
+---
+
+## ✅ **Правильный ответ: `things.index`, `things.create`, `things.show` и т.д.**
+
+### 📌 Почему именно **`things`** (множественное число)?
+
+### 1. **Laravel следует REST-конвенциям**
+В RESTful архитектуре ресурсы всегда именуются во **множественном числе**:
+
+| Действие | Роут | Контроллер метод | Логика |
+|----------|------|------------------|--------|
+| Просмотр списка | `GET /things` | `index()` | Все `Thing` |
+| Создание формы | `GET /things/create` | `create()` | Форма для нового `Thing` |
+| Сохранение | `POST /things` | `store()` | Создать один `Thing` |
+| Просмотр одного | `GET /things/{thing}` | `show()` | Один `Thing` |
+| Редактирование | `GET /things/{thing}/edit` | `edit()` | Форма для редактирования одного `Thing` |
+| Обновление | `PUT/PATCH /things/{thing}` | `update()` | Обновить один `Thing` |
+| Удаление | `DELETE /things/{thing}` | `destroy()` | Удалить один `Thing` |
+
+> 🔗 Это **стандарт Laravel**, и он основан на [RESTful Resource Routing](https://laravel.com/docs/routing#resource-routes).
+
+---
+
+### 2. **Laravel автоматически генерирует роуты в множественном числе**
+
+Если ты напишешь в `routes/web.php`:
+
+```php
+Route::resource('things', ThingController::class);
+```
+
+Laravel автоматически создаст роуты:
+
+```
+GET     /things           → things.index
+GET     /things/create    → things.create
+POST    /things           → things.store
+GET     /things/{thing}   → things.show
+GET     /things/{thing}/edit → things.edit
+PUT/PATCH /things/{thing} → things.update
+DELETE  /things/{thing}   → things.destroy
+```
+
+И **все шаблоны должны называться**:
+```
+resources/views/things/index.blade.php
+resources/views/things/create.blade.php
+resources/views/things/edit.blade.php
+resources/views/things/show.blade.php
+```
+
+> ⚠️ Если ты назовёшь шаблон `thing.index`, а роут — `things.index` — это будет **не соответствие**, и Laravel не найдёт шаблон.
+
+---
+
+### 3. **Модель — `Thing` (единственное число)**  
+**Это нормально и правильно!**
+
+| Сущность | Имя |
+|----------|-----|
+| Модель | `Thing` (единственное — потому что представляет **один** объект) |
+| Таблица | `things` (множественное — потому что хранит **много** объектов) |
+| Роуты / шаблоны | `things.*` (множественное — потому что ресурс **коллекция** объектов) |
+
+> ✅ Это **стандарт Laravel**:  
+> - Модель: `User`, `Post`, `Thing`  
+> - Таблица: `users`, `posts`, `things`  
+> - Роуты/шаблоны: `users.index`, `posts.show`, `things.create`
+
+---
+
+### 4. **Поддержка IDE и инструментов**
+- **Laravel IDE Helper** и **PHPStorm** автоматически подхватывают `Route::resource('things', ...)` и предлагают автодополнение для `things.index`.
+- **Laravel Sail, Nova, Breeze** — всё построено на множественном числе.
+
+---
+
+## ❌ Что будет, если использовать `thing.index`?
+
+- Ты **нарушаешь соглашения** — другие разработчики будут сбиваться.
+- Тебе придётся вручную прописывать все роуты:
+  ```php
+  Route::get('/things', [ThingController::class, 'index'])->name('thing.index'); // ❌ Неинтуитивно
+  ```
+- Ты не сможешь использовать `Route::resource()` без переопределения.
+- Шаблоны будут называться `thing/index.blade.php` — **не соответствуют** роуту `things.index`.
+- Ты **теряешь преимущества автоматизации** и **стандартов**.
+
+---
+
+## ✅ Рекомендация: Следуй стандартам Laravel
+
+| Элемент | Имя |
+|--------|-----|
+| **Модель** | `Thing` |
+| **Таблица** | `things` |
+| **Контроллер** | `ThingController` |
+| **Роуты** | `things.index`, `things.create`, `things.store`, ... |
+| **Шаблоны** | `resources/views/things/index.blade.php`, `create.blade.php`, ... |
+| **Форма для создания** | `@route('things.store')` |
+| **Ссылка на список** | `route('things.index')` |
+
+---
+
+## 💡 Бонус: Как быстро создать всё по стандарту?
+
+```bash
+# Создать модель, миграцию, контроллер, ресурсные роуты
+php artisan make:model Thing -mcr
+
+# Добавить ресурсные роуты в routes/web.php
+Route::resource('things', ThingController::class);
+```
+
+И всё — у тебя уже есть:
+- Модель `Thing`
+- Миграция `create_things_table`
+- Контроллер `ThingController` с методами `index`, `create`, `store`, ...
+- Роуты в `php artisan route:list` как `things.index`, `things.create` и т.д.
+- Шаблоны нужно просто создать в папке `resources/views/things/`
+
+---
+
+## ✅ Итог
+
+> **Используй `things.index`, `things.create`, `things.show` — это правильно, стандартно и рекомендуется Laravel.**  
+> Модель — `Thing` (единственное число), всё остальное — во множественном.
+
+Ты не просто "называешь роуты" — ты **вписываешься в экосистему Laravel**, и это делает твой код **профессиональным, понятным и легко поддерживаемым**.
+
+Если хочешь — могу сгенерировать полный пример структуры папок и кода для `Thing` по этим стандартам.
